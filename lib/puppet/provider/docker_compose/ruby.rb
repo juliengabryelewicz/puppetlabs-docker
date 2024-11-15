@@ -43,9 +43,8 @@ Puppet::Type.type(:docker_compose).provide(:ruby) do
     return false if compose_services.count != compose_containers.uniq.count
 
     counts = Hash[*compose_services.each.map { |key, array|
-                    image = array['image'] || get_image(key, compose_services)
-                    Puppet.info("Checking for compose service #{key} #{image}")
-                    [key, compose_containers.count("'#{key}-#{image}'")]
+                    Puppet.info("Checking for compose service #{key}")
+                    [key, compose_containers.count("'#{key}'")]
                   }.flatten]
 
     # No containers found for the project
@@ -58,18 +57,6 @@ Puppet::Type.type(:docker_compose).provide(:ruby) do
     else
       true
     end
-  end
-
-  def get_image(service_name, compose_services)
-    image = compose_services[service_name]['image']
-    unless image
-      if compose_services[service_name]['extends']
-        image = get_image(compose_services[service_name]['extends'], compose_services)
-      elsif compose_services[service_name]['build']
-        image = "#{name}-#{service_name}"
-      end
-    end
-    image
   end
 
   def create
