@@ -118,7 +118,6 @@ class docker::params {
             $socket_override            = false
             $socket_overrides_template  = 'docker/etc/systemd/system/docker.socket.d/socket-overrides.conf.epp'
             $storage_config             = '/etc/default/docker-storage'
-            include docker::systemd_reload
           } else {
             $service_config_template    = 'docker/etc/default/docker.epp'
             $service_overrides_template = undef
@@ -147,7 +146,6 @@ class docker::params {
           $service_hasstatus          = true
           $service_hasrestart         = true
 
-          include docker::systemd_reload
         }
       }
 
